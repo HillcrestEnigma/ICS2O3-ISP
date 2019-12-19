@@ -40,14 +40,24 @@ void callFunc() {
             store("newState", "animation");
         } else if (fetch("lastState").equals("mainMenu") || fetch("lastState").equals("animation")) {
             store("newState", "mainMenu");
+        } else if (fetch("lastState").equals("help")) {
+            store("newState", "help");
+        } else if (fetch("lastState").equals("maze")) {
+            store("newState", "maze");
+        } else if (fetch("lastState").equals("game")) {
+            store("newState", "game");
+        } else if (fetch("lastState").equals("exit")) {
+            store("newState", "exit");
         }
     } else {
         store("newState", fetch("setState"));
         store("setState", "none");
     }
-    if (!fetch("newState").equals("lastState")) {
+
+    if (!fetch("newState").equals(fetch("lastState"))) {
         store("stateStartTime", millis());
         store("lastState", fetch("newState"));
+        println(fetch("newState"));
     }
     store("stateCurTime", millis()-fetchInt("stateStartTime"));
     if (fetch("newState").equals("loading")) {
@@ -56,6 +66,14 @@ void callFunc() {
         animation();
     } else if (fetch("newState").equals("mainMenu")) {
         mainMenu();
+    } else if (fetch("newState").equals("help")) {
+        help();
+    } else if (fetch("newState").equals("maze")) {
+        maze();
+    } else if (fetch("newState").equals("game")) {
+        game();
+    } else if (fetch("newState").equals("exit")) {
+        goodbye();
     }
     store("newState", "none");
 }
@@ -145,6 +163,7 @@ void loading() {
 
 void mainMenu() {
     fill(0);
+    stroke(0);
     textAlign(CENTER, CENTER);
     textSize(50);
     text("Ley learns Vim!", width/2, 100);
@@ -162,6 +181,37 @@ void mainMenu() {
     text("Start Maze", width/2, 525);
     text("Start Game", width/2, 650);
     text("Exit Game", width/2, 775);
+
+    fill(155, 155, 100, 75);
+    noStroke();
+    store("mainMenuHoveringButton", "none");
+    if (mouseX >= width/2-100 && mouseX <= width/2+100) {
+        if (mouseY >= 350 && mouseY <= 450) {
+            rect(width/2, 400, 180, 80);
+            store("mainMenuHoveringButton", "instruction");
+        } else if (mouseY >= 475 && mouseY <= 575) {
+            rect(width/2, 525, 180, 80);
+            store("mainMenuHoveringButton", "startMaze");
+        } else if (mouseY >= 600 && mouseY <= 700) {
+            rect(width/2, 650, 180, 80);
+            store("mainMenuHoveringButton", "startGame");
+        } else if (mouseY >= 725 && mouseY <= 825) {
+            rect(width/2, 775, 180, 80);
+            store("mainMenuHoveringButton", "exit");
+        }
+    }
+
+    if (mousePressed) {
+        if (fetch("mainMenuHoveringButton").equals("instruction")) {
+            store("setState", "help");
+        } else if (fetch("mainMenuHoveringButton").equals("startMaze")) {
+            store("setState", "maze");
+        } else if (fetch("mainMenuHoveringButton").equals("startGame")) {
+            store("setState", "game");
+        } else if (fetch("mainMenuHoveringButton").equals("exit")) {
+            store("setState", "exit");
+        }
+    }
 }
 
 void station1() {
@@ -185,15 +235,29 @@ void station5() {
 }
 
 void help() {
-
+    store("state", "instructions");
 }
 
 void goodbye() {
+    store("state", "exit");
+    if (fetchInt("stateCurTime") < 5000) {
+        textSize(30);
+        textAlign(CENTER, CENTER);
+        fill(0);
+        text("Thank you for playing this glorious game!", width/2, 400);
+        textSize(20);
+        text("The game will exit in 5 seconds...", width/2, 600);
+    } else {
+        exit();
+    }
+}
 
+void maze() {
+    store("state", "maze");
 }
 
 void game() {
-
+    store("state", "game");
 }
 
 void mouseReleased() {
