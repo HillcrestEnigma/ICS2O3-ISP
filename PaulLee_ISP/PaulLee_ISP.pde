@@ -2,6 +2,7 @@ StringDict state = new StringDict();
 PImage mazeImg;
 PFont font;
 StringList curVimDisplay;
+String[] helpMessage;
 
 void store(String dict_key, int value) {
     state.set(dict_key, str(value));
@@ -236,6 +237,17 @@ void station5() {
 
 void help() {
     store("state", "instructions");
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("helpMessage"), 50, 50, width-50, height-50);
+
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "mainMenu");
+        store("keystrokes", fetch("keystrokes") + "none");
+    }
 }
 
 void goodbye() {
@@ -267,6 +279,17 @@ void mouseReleased() {
     }
 }
 
+void keyPressed() {
+    store("keystrokes", fetch("keystrokes") + key);
+    if (key == ESC) {
+        store("curVimCommand", "");
+    } else {
+        store("curVimCommand", fetch("curVimCommand") + key);
+    }
+
+    key = 0; // https://processing.org/discourse/beta/num_1276201899.html
+}
+
 void draw() {
     background(255);
     stroke(0);
@@ -277,6 +300,23 @@ void draw() {
     textSize(15);
     textAlign(LEFT, TOP);
     text("("+mouseX+", "+mouseY+")", mouseX, mouseY);
+
+    store("keystrokesLen", fetch("keystrokes").length());
+
+    // rectMode(CORNERS);
+    // fill(255);
+    // rect(0, height-25, width, height);
+    // fill(50);
+    // noStroke();
+    // textSize(10);
+    // text(fetch("curVimCommand"), width*6/10, height);
+    
+    // store("curVimCommandLen", fetch("curVimCommand").length());
+    // if (fetchInt("curVimCommandLen") > 1) {
+    //     store("curVimCommand", "");
+    // } else if (fetch("curVimCommand").endsWith("\n")) {
+    //     store("curVimCommand", "");
+    // }
 }
 
 void setup() {
@@ -290,4 +330,9 @@ void setup() {
     store("lastState", "none");
     store("skipAnimation", "false");
     store("setState", "none");
+    store("keystrokes", "none");
+    store("curVimCommand", "");
+
+    helpMessage = loadStrings("help.txt");
+    store("helpMessage", join(helpMessage, "\n"));
 }
