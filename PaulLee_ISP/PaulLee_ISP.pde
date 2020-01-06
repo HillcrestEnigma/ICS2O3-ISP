@@ -2,7 +2,6 @@ StringDict state = new StringDict();
 PImage mazeImg;
 PFont font;
 StringList curVimDisplay;
-String[] helpMessage;
 
 void store(String dict_key, int value) {
     state.set(dict_key, str(value));
@@ -49,6 +48,18 @@ void callFunc() {
             store("newState", "game");
         } else if (fetch("lastState").equals("exit")) {
             store("newState", "exit");
+        } else if (fetch("lastState").equals("station1")) {
+            store("newState", "station1");
+        } else if (fetch("lastState").equals("station2")) {
+            store("newState", "station2");
+        } else if (fetch("lastState").equals("station3")) {
+            store("newState", "station3");
+        } else if (fetch("lastState").equals("station4")) {
+            store("newState", "station4");
+        } else if (fetch("lastState").equals("station5")) {
+            store("newState", "station5");
+        } else if (fetch("lastState").equals("station6")) {
+            store("newState", "station6");
         }
     } else {
         store("newState", fetch("setState"));
@@ -75,6 +86,18 @@ void callFunc() {
         game();
     } else if (fetch("newState").equals("exit")) {
         goodbye();
+    } else if (fetch("newState").equals("station1")) {
+        station1();
+    } else if (fetch("newState").equals("station2")) {
+        station2();
+    } else if (fetch("newState").equals("station3")) {
+        station3();
+    } else if (fetch("newState").equals("station4")) {
+        station4();
+    } else if (fetch("newState").equals("station5")) {
+        station5();
+    } else if (fetch("newState").equals("station6")) {
+        station6();
     }
     store("newState", "none");
 }
@@ -216,22 +239,100 @@ void mainMenu() {
 }
 
 void station1() {
+    store("state", "station1");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation1Completed", "true");
+    }
+
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation1Message"), 50, 50, width-50, height-50);
 
 }
 
 void station2() {
+    store("state", "station2");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation2Completed", "true");
+    }
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation2Message"), 50, 50, width-50, height-50);
 
 }
 
 void station3() {
 
+    store("state", "station3");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation3Completed", "true");
+    }
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation3Message"), 50, 50, width-50, height-50);
+
 }
 
 void station4() {
+    store("state", "station4");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation4Completed", "true");
+    }
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation4Message"), 50, 50, width-50, height-50);
 
 }
 
 void station5() {
+    store("state", "station5");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation5Completed", "true");
+    }
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation5Message"), 50, 50, width-50, height-50);
+
+}
+
+void station6() {
+    store("state", "station6");
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "maze");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("mazeStation6Completed", "true");
+    }
+    textSize(20);
+    textAlign(BASELINE, BASELINE);
+    textLeading(30);
+    fill(0);
+    rectMode(CORNERS);
+    text(fetch("mazeStation6Message"), 50, 50, width-50, height-50);
 
 }
 
@@ -266,6 +367,133 @@ void goodbye() {
 
 void maze() {
     store("state", "maze");
+    store("mazeMoveSpeed", 20);
+
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "mainMenu");
+        store("keystrokes", fetch("keystrokes") + "none");
+    }
+
+    background(200, 200, 100);
+
+    image(mazeImg, fetchFloat("mazeX"), fetchFloat("mazeY"));
+
+    store("mazeMaxMoveDistLeft", 20);
+    store("mazeMaxMoveDistRight", 20);
+    store("mazeMaxMoveDistDown", 20);
+    store("mazeMaxMoveDistUp", 20);
+    
+    store("mazePosColor", get(width/2, height/2));
+    store("mazeStation1Color", color(#FF0000));
+    store("mazeStation2Color", color(#FFFF00));
+    store("mazeStation3Color", color(#00FF00));
+    store("mazeStation4Color", color(#00FFFF));
+    store("mazeStation5Color", color(#6700FF));
+    store("mazeStation6Color", color(#FF00FF));
+    
+    if (fetchInt("mazePosColor") == fetchInt("mazeStation1Color") && !fetchBool("mazeStation1Completed")) {
+        println("station1");
+        store("setState", "station1");
+    } else if (fetchInt("mazePosColor") == fetchInt("mazeStation2Color") && !fetchBool("mazeStation2Completed")) {
+        store("setState", "station2");
+    } else if (fetchInt("mazePosColor") == fetchInt("mazeStation3Color") && !fetchBool("mazeStation3Completed")) {
+        store("setState", "station3");
+    } else if (fetchInt("mazePosColor") == fetchInt("mazeStation4Color") && !fetchBool("mazeStation4Completed")) {
+        store("setState", "station4");
+    } else if (fetchInt("mazePosColor") == fetchInt("mazeStation5Color") && !fetchBool("mazeStation5Completed")) {
+        store("setState", "station5");
+    } else if (fetchInt("mazePosColor") == fetchInt("mazeStation6Color") && !fetchBool("mazeStation6Completed")) {
+        store("setState", "station6");
+    }
+
+    for (int i=0; i<=fetchFloat("mazeMoveSpeed"); i++) {
+        if (get(width/2-i-3, height/2) == color(0, 0, 0)) {
+            store("mazeMaxMoveDistLeft", i);
+            break;
+        }
+    }
+
+    for (int i=0; i<=fetchFloat("mazeMoveSpeed"); i++) {
+        if (get(width/2, height/2-i-35) == color(0, 0, 0)) {
+            store("mazeMaxMoveDistUp", i);
+            break;
+        }
+    }
+
+    for (int i=0; i<=fetchFloat("mazeMoveSpeed"); i++) {
+        if (get(width/2+i+3, height/2) == color(0, 0, 0)) {
+            store("mazeMaxMoveDistRight", i);
+            break;
+        }
+    }
+
+    for (int i=0; i<=fetchFloat("mazeMoveSpeed"); i++) {
+        if (get(width/2, height/2+i+35) == color(0, 0, 0)) {
+            store("mazeMaxMoveDistDown", i);
+            break;
+        }
+    }
+
+
+    if (fetch("keystrokes").endsWith("h")) {
+        store("mazeX", fetchFloat("mazeX") + fetchFloat("mazeMaxMoveDistLeft"));
+        store("mazeCharDirection", "l");
+        store("keystrokes", fetch("keystrokes") + "none&");
+    } else if (fetch("keystrokes").endsWith("j")) {
+        store("mazeY", fetchFloat("mazeY") - fetchFloat("mazeMaxMoveDistDown"));
+        store("mazeCharDirection", "d");
+        store("keystrokes", fetch("keystrokes") + "none&");
+    } else if (fetch("keystrokes").endsWith("k")) {
+        store("mazeY", fetchFloat("mazeY") + fetchFloat("mazeMaxMoveDistUp"));
+        store("mazeCharDirection", "u");
+        store("keystrokes", fetch("keystrokes") + "none&");
+    } else if (fetch("keystrokes").endsWith("l")) {
+        store("mazeX", fetchFloat("mazeX") - fetchFloat("mazeMaxMoveDistRight"));
+        store("mazeCharDirection", "r");
+        store("keystrokes", fetch("keystrokes") + "none&");
+    }
+
+    fill(100, 100, 255);
+    stroke(0);
+
+    rectMode(CENTER);
+
+    if (fetch("mazeCharDirection").equals("d")) {
+        rect(width/2, height/2, 10, 30);
+        
+        rect(width/2-5, height/2-3, 5, 15);
+        rect(width/2+5, height/2-3, 5, 15);
+
+        rect(width/2-2.5, height/2+25, 5, 20);
+        rect(width/2+2.5, height/2+25, 5, 20);
+    } else if (fetch("mazeCharDirection").equals("u")) {
+        rect(width/2-5, height/2-3, 5, 15);
+        rect(width/2+5, height/2-3, 5, 15);
+
+        rect(width/2-2.5, height/2+25, 5, 20);
+        rect(width/2+2.5, height/2+25, 5, 20);       
+
+        rect(width/2, height/2, 10, 30);
+    } else {
+        rect(width/2, height/2, 10, 30);
+
+        rect(width/2, height/2-3, 5, 15);
+
+        rect(width/2, height/2+25, 8, 20);
+    }
+
+    ellipseMode(RADIUS);
+    circle(width/2, height/2-25, 10);
+
+    fill(255, 255, 255);
+    if (fetch("mazeCharDirection").equals("l") || fetch("mazeCharDirection").equals("d")) {
+        circle(width/2-5, height/2-30, 5);
+    }
+    if (fetch("mazeCharDirection").equals("r") || fetch("mazeCharDirection").equals("d")) {
+        circle(width/2+5, height/2-30, 5);
+    }
+
+
 }
 
 void game() {
@@ -333,6 +561,24 @@ void setup() {
     store("keystrokes", "none");
     store("curVimCommand", "");
 
-    helpMessage = loadStrings("help.txt");
-    store("helpMessage", join(helpMessage, "\n"));
+    store("helpMessage", join(loadStrings("help.txt"), "\n"));
+    store("mazeStation1Message", join(loadStrings("station1.txt"), "\n"));
+    store("mazeStation2Message", join(loadStrings("station2.txt"), "\n"));
+    store("mazeStation3Message", join(loadStrings("station3.txt"), "\n"));
+    store("mazeStation4Message", join(loadStrings("station4.txt"), "\n"));
+    store("mazeStation5Message", join(loadStrings("station5.txt"), "\n"));
+    store("mazeStation6Message", join(loadStrings("station6.txt"), "\n"));
+
+    mazeImg = loadImage("maze2.png");
+    store("mazeX", 100);
+    store("mazeY", 100);
+    store("mazePlayerDirection", 3);
+    store("mazeCharDirection", "d");
+
+    store("mazeStation1Completed", "false");
+    store("mazeStation2Completed", "false");
+    store("mazeStation3Completed", "false");
+    store("mazeStation4Completed", "false");
+    store("mazeStation5Completed", "false");
+    store("mazeStation6Completed", "false");
 }

@@ -1,0 +1,23 @@
+Station #1 - Welcome to VIM!
+============================
+First of all, what is VIM? VIM is just a text editor.
+What makes VIM special? It allows the user to be more efficient.
+How? It forces the user to only use keyboards. (No more mouse!)
+The time it takes for the programmer to move their hands back and forth between the mouse and the keyboard is long and is not a good use of time.
+VIM also allows you to define keyboard shortcuts to accomplish repetitive tasks faster.
+Not being able to use mouse may sound daunting, but after getting some time getting used to, it will get easy.
+
+A key concept in VIM is modes. There are selveral modes, but the most important modes are: NORMAL and INSERT.
+NORMAL mode listens for VIM keyboard shortcuts.
+INSERT mode inserts the keystrokes made by the user into the file.
+
+By default, VIM starts in NORMAL mode.
+
+To move the cursor on the screen while in NORMAL mode use 'hjkl' keys.
+Pressing h moves your cursor left.
+Pressing j moves your cursor down.
+Pressing k moves your cursor up.
+Pressing l moves your cursor right.
+
+These keys will work in the maze.
+To exit this station, press ':q'.

@@ -1,0 +1,15 @@
+Station #2 - Exiting VIM and other stuff.
+=========================================
+Congratulations! You have used the hjkl keys to move your cursor! (Or in this case that weird purple guy)
+By now you may be wondering why you had to press the keys ':q' to exit Station #1.
+By default, this is how you exit the VIM editor. Although you have to press enter after typing ':q'.
+The ':' keystroke causes VIM to enter the COMMAND mode if you are in the NORMAL mode
+The COMMAND mode listens for commands.
+'q' is a command for exiting the VIM editor. It only works when you have not made any modifications on the file you are editing.
+Together ':q' is a command for exiting VIM.
+If you made some modifications on the file that you are editing, but would like to NOT save them, issuing the command ':q' will display an error.
+To override this error message ':q!' command is used.
+If you would like to save your modifications the ':wq' command is used. 'w' is a command for saving. Simply, the 'wq' command saves, then quits immidiately after.
+Try to guess which command is used to save to the file you are editing but not quit the VIM editor. The answer will be revealed in station #3.
+NOTE: These commands won't work in this game, except for the ':q' command. Also typing ':Q' won't work. If typing the command don't work, you may have typed the command with the wrong capitalization.
+Your objective in this maze is to get to all five stations (The colored rectangles) (You already have visited 2 stations) and exit by getting to the pink rectangle at the end. Good luck!
