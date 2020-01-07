@@ -323,16 +323,27 @@ void station5() {
 void station6() {
     store("state", "station6");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
-        store("setState", "maze");
+        if (fetchBool("mazeStation6Completed")) {
+            store("setState", "mainMenu");
+        } else {
+            store("setState", "maze");
+            store("mazeY", fetchFloat("mazeY")+20);
+        }
         store("keystrokes", fetch("keystrokes") + "none&");
-        store("mazeStation6Completed", "true");
     }
     textSize(20);
     textAlign(BASELINE, BASELINE);
     textLeading(30);
     fill(0);
     rectMode(CORNERS);
-    text(fetch("mazeStation6Message"), 50, 50, width-50, height-50);
+    if (fetchBool("mazeStation1Completed") && fetchBool("mazeStation2Completed") && fetchBool("mazeStation3Completed") && fetchBool("mazeStation4Completed") && fetchBool("mazeStation5Completed")) {
+        store("mazeStation6Completed", "true");
+    }
+    if (fetchBool("mazeStation6Completed")) {
+        text(fetch("mazeStation6CompleteMessage"), 50, 50, width-50, height-50);
+    } else {
+        text(fetch("mazeStation6IncompleteMessage"), 50, 50, width-50, height-50);
+    }
 
 }
 
@@ -567,11 +578,12 @@ void setup() {
     store("mazeStation3Message", join(loadStrings("station3.txt"), "\n"));
     store("mazeStation4Message", join(loadStrings("station4.txt"), "\n"));
     store("mazeStation5Message", join(loadStrings("station5.txt"), "\n"));
-    store("mazeStation6Message", join(loadStrings("station6.txt"), "\n"));
+    store("mazeStation6CompleteMessage", join(loadStrings("station6_complete.txt"), "\n"));
+    store("mazeStation6IncompleteMessage", join(loadStrings("station6_incomplete.txt"), "\n"));
 
     mazeImg = loadImage("maze2.png");
     store("mazeX", 100);
-    store("mazeY", 100);
+    store("mazeY", 120);
     store("mazePlayerDirection", 3);
     store("mazeCharDirection", "d");
 
@@ -580,5 +592,4 @@ void setup() {
     store("mazeStation3Completed", "false");
     store("mazeStation4Completed", "false");
     store("mazeStation5Completed", "false");
-    store("mazeStation6Completed", "false");
 }

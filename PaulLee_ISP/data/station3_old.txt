@@ -11,9 +11,12 @@ Want to delete 3 characters?
 Press '3x'. Watch as VIM deletes three characters below and to the right of the cursor!
 Amazing, right?
 
-When you type a number (a) before you press the character 'x',
-VIM repeats this deletion operation ('x') a times.
+When you type a number (x) before you press one of the VIM operators (more on this later),
+VIM repeats this operator x times.
 
-The 'x' operation is not supported in this maze.
+What is a VIM operator? An operator is a specific action that you do to your file.
+'x' is one of the operators. There is other operators such as 'd', but this it out of scope in this game.
+
+These operators are not supported in this maze.
 
 To exit, type ':q'.

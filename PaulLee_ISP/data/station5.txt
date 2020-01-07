@@ -1,0 +1,11 @@
+Station #5 - Inserting
+======================
+How do you insert text in VIM?
+In the NORMAL mode, the characters entered by the user will not show up on the text file.
+To insert text, you must enter the INSERT mode.
+How? When in the NORMAL mode, press "i". This will place you in the INSERT mode.
+In the INSERT mode all keystrokes will be inserted into the text file, until you press the escape key, which places you back into NORMAL mode.
+
+This is a short station.
+Exit this station by typing ':q'.
+Good luck!

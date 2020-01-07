@@ -1,0 +1,13 @@
+Station #6 - The End
+====================
+Congrats! You have reached the end of the maze.
+I (the creator of this maze a.k.a. Paul Lee) hope you learned the basics of VIM.
+The next part of this game, the game of testing, creates a less-than-minimal VIM environment to test your skills.
+
+Please remember that VIM is a very complex topic, and this game only scratches the surface.
+I hope that this game will inspire you to try out VIM and even incorporate VIM into your daily lives. >:)
+
+Please feel free to return to the maze to refresh your memory of VIM concepts.
+
+P.S. While VIM is a good text editor, Neovim (another text editor) is better.
+There are selveral reasons for this, but they are out of scope for this game.

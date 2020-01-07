@@ -1,0 +1,20 @@
+Station #4 - Motions and Operators
+==================================
+It's time that you learn about VIM motions and operators.
+Motions are a way to select parts of the file you are editing relative to the location of your cursor.
+There are many motions, but to list a few of them:
+'w' selects characters from the cursor until the start of the next word after the word the cursor is currently on EXCLUDING the first character.
+'e' selects characters from the cursor until the end of the word that the cursor in on INCLUDING the last character.
+'$' selects characters from the cursor until the end of the line INCLUDING the last character.
+
+While in the NORMAL mode, pressing these motions will move the characters to the end of the selected characters.
+However, when mixed with VIM operators, motions become more useful.
+
+Simiarly, there are many operators in VIM. One of them is 'd'.
+'d' is for deleting. When you type 'de'. VIM deletes all the characters selected by the 'e' motion.
+
+For example, When your cursor is on 'A' when you are editing 'ABCDE FGHIJ', pressing 'de' will result in ' FGHIJ'.
+This is because VIM deleted from 'A' to 'E'. Since from 'A' the end of the word is 'E'.
+
+This is just an introduction to VIM motions and operators.
+These motions and operators will not be supported in the maze.
