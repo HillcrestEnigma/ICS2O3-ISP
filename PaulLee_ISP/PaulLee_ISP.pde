@@ -1,7 +1,8 @@
 StringDict state = new StringDict();
 PImage mazeImg;
 PFont font;
-StringList curVimDisplay;
+char[][] curVimDisplay = new char[20][25];
+int[][] gameToDelete = new int[20][2];
 
 void store(String dict_key, int value) {
     state.set(dict_key, str(value));
@@ -30,6 +31,20 @@ float fetchFloat(String dict_key) {
 boolean fetchBool(String dict_key) {
     return boolean(fetch(dict_key));
 }
+
+char[] deleteSubset(char[] array, int startIndex, int endIndex) {
+    return concat(concat(subset(array, 0, startIndex), subset(array, endIndex + 1)), new char[endIndex - startIndex + 1]);
+}
+
+// void deepCopy(char[][] source_array, char[][] dest_array) {
+//     for (int i=0; i<source_array.length; i++) {
+//         arrayCopy(source_array[i], dest_array[i]);
+//     }
+// }
+
+// char[][] deleteSubset(char[][] array, int startIndex, int endIndex) {
+//     return concat(subset(array, 0, startIndex), subset(array, endIndex + 1));
+// }
 
 void callFunc() {
     store("curTime", millis());
@@ -231,6 +246,23 @@ void mainMenu() {
         } else if (fetch("mainMenuHoveringButton").equals("startMaze")) {
             store("setState", "maze");
         } else if (fetch("mainMenuHoveringButton").equals("startGame")) {
+            // deepCopy(vimDisplay, curVimDisplay);
+            // println(vimDisplay[0]);
+            // println(curVimDisplay[0]);
+            store("gameScore", 0);
+            for (int i=0; i<20; i++) {
+                store("setupCurVimDisplayLine", loadStrings("vim_display.txt")[i]);
+                for (int j=0; j<fetch("setupCurVimDisplayLine").length(); j++) {
+                    curVimDisplay[i][j] = fetch("setupCurVimDisplayLine").charAt(j);
+                }
+            }
+            for (int i=0; i<20; i++) {
+                String[] words = split(new String(curVimDisplay[i]), " ");
+                println(words[1]);
+                store("randObj", max(int(random(words.length) - 1), 0));
+                gameToDelete[i][0] = join(subset(words, 0, fetchInt("randObj")), " ").length() + 1;
+                gameToDelete[i][1] = gameToDelete[i][0] + words[fetchInt("randObj")].length() - 1;
+            }
             store("setState", "game");
         } else if (fetch("mainMenuHoveringButton").equals("exit")) {
             store("setState", "exit");
@@ -509,6 +541,181 @@ void maze() {
 
 void game() {
     store("state", "game");
+
+    if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        store("setState", "mainMenu");
+        store("keystrokes", fetch("keystrokes") + "none&");
+        store("gameScore", 0);
+    }
+
+    store("vimSelectionStartIndex", fetch("gameCursorX"));
+    store("vimSelectionEndIndex", fetch("gameCursorX"));
+    store("vimSelectionY", fetch("gameCursorY"));
+
+    if (fetch("keystrokes").endsWith("e")) {
+        for (int i=fetchInt("vimSelectionEndIndex"); i<24; i++) {
+            if (Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i+1])) {
+                store("vimSelectionEndIndex", i+1);
+                break;
+            }
+        }
+        for (int i=fetchInt("vimSelectionEndIndex"); i<24; i++) {
+            if (!Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i+1])) {
+                store("vimSelectionEndIndex", i);
+                break;
+            }
+        }
+    } else if (fetch("keystrokes").endsWith("w")) {
+        for (int i=fetchInt("vimSelectionEndIndex"); i<24; i++) {
+            if (!Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i + 1])) {
+                store("vimSelectionEndIndex", i + 1);
+                break;
+            }
+        }
+        for (int i=fetchInt("vimSelectionEndIndex"); i<24; i++) {
+            if (Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i + 1])) {
+                store("vimSelectionEndIndex", i + 1);
+                break;
+            }
+        }
+    } else if (fetch("keystrokes").endsWith("b")) {
+        for (int i=fetchInt("vimSelectionStartIndex"); i>0; i--) {
+            if (Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i - 1])) {
+                store("vimSelectionStartIndex", i - 1);
+                break;
+            }
+        }
+        for (int i=fetchInt("vimSelectionStartIndex"); i>=0; i--) {
+            if (i == 0) {
+                store("vimSelectionStartIndex", i);
+                break;
+            }
+            if (!Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i - 1])) {
+                store("vimSelectionStartIndex", i);
+                break;
+            }
+        }
+    } else if (fetch("keystrokes").endsWith("$")) {
+        store("vimSelectionEndIndex", 24);
+    } else if (fetch("keystrokes").endsWith("0")) {
+        store("vimSelectionStartIndex", 0);
+    } else if (fetch("keystrokes").endsWith("G")) {
+        store("vimSelectionEndIndex", 0);
+        store("gameCursorY", 19);
+    } else if (fetch("keystrokes").endsWith("gg")) {
+        store("vimSelectionStartIndex", 0);
+        store("gameCursorY", 0);
+    } else if (fetch("keystrokes").endsWith("h") && fetchInt("gameCursorX") != 0) {
+        store("vimSelectionStartIndex", fetchInt("gameCursorX") - 1);
+    } else if (fetch("keystrokes").endsWith("l") && fetchInt("gameCursorX") != 24) {
+        store("vimSelectionEndIndex", fetchInt("gameCursorX") + 1);
+    } else if (fetch("keystrokes").endsWith("j") && fetchInt("gameCursorY") != 19) {
+        store("gameCursorY", fetchInt("gameCursorY") + 1);
+    } else if (fetch("keystrokes").endsWith("k") && fetchInt("gameCursorY") != 0) {
+        store("gameCursorY", fetchInt("gameCursorY") - 1);
+    }
+
+    if (fetch("keystrokes").endsWith("x")) {
+        if (gameToDelete[fetchInt("gameCursorY")][0] <= fetchInt("gameCursorX") && gameToDelete[fetchInt("gameCursorY")][1] >= fetchInt("gameCursorX")) {
+            gameToDelete[fetchInt("gameCursorY")][1] -= 1;
+        } else if (fetchInt("gameCursorX") < gameToDelete[fetchInt("gameCursorY")][0]) {
+            gameToDelete[fetchInt("gameCursorY")][0] -= 1;
+            gameToDelete[fetchInt("gameCursorY")][1] -= 1;
+        }
+        curVimDisplay[fetchInt("gameCursorY")] = deleteSubset(curVimDisplay[fetchInt("gameCursorY")], fetchInt("gameCursorX"), fetchInt("gameCursorX"));
+        store("keystrokes", "none&");
+    }
+
+    if (fetch("keystrokes").endsWith("d$")) {
+        
+        print("delet everything");
+        curVimDisplay[fetchInt("gameCursorY")] = deleteSubset(curVimDisplay[fetchInt("gameCursorY")], fetchInt("gameCursorX"), 24);
+    }
+        
+
+    if (fetch("keystrokes").charAt(fetch("keystrokes").length() - 2) == 'd' && !fetch("keystrokes").endsWith("G")) {
+        if (fetch("keystrokes").endsWith("w")) {
+            store("vimSelectionEndIndex", fetchInt("vimSelectionEndIndex") - 1);
+        }
+        store("redRegionDeleteStart", max(gameToDelete[fetchInt("gameCursorY")][0], fetchInt("vimSelectionStartIndex")));
+        store("redRegionDeleteEnd", min(gameToDelete[fetchInt("gameCursorY")][1], fetchInt("vimSelectionEndIndex")));
+        if (fetchInt("redRegionDeleteEnd") - fetchInt("redRegionDeleteStart") >= 0) {
+            gameToDelete[fetchInt("gameCursorY")][1] -= fetchInt("redRegionDeleteEnd") - fetchInt("redRegionDeleteStart") + 1;
+        } else if (fetchInt("gameCursorX") < fetchInt("redRegionDeleteStart")) {
+            gameToDelete[fetchInt("gameCursorY")][0] -= fetchInt("vimSelectionEndIndex") - fetchInt("vimSelectionStartIndex") + 1;
+            gameToDelete[fetchInt("gameCursorY")][1] -= fetchInt("vimSelectionEndIndex") - fetchInt("vimSelectionStartIndex") + 1;
+        }
+        store("mazeNumCharDelete", fetchInt("vimSelectionEndIndex") - fetchInt("vimSelectionStartIndex") + 1);
+        curVimDisplay[fetchInt("gameCursorY")] = deleteSubset(curVimDisplay[fetchInt("gameCursorY")], fetchInt("vimSelectionStartIndex"), fetchInt("vimSelectionEndIndex"));
+        store("vimSelectionStartIndex", fetch("gameCursorX"));
+        store("vimSelectionEndIndex", fetch("gameCursorX"));
+        store("keystrokes", "none&");
+    }
+
+    if (fetchInt("vimSelectionStartIndex") != fetchInt("gameCursorX")) {
+        store("gameCursorX", fetchInt("vimSelectionStartIndex"));
+        store("keystrokes", "none&");
+    } else if (fetchInt("vimSelectionEndIndex") != fetchInt("gameCursorX")) {
+        store("gameCursorX", fetchInt("vimSelectionEndIndex"));
+        store("keystrokes", "none&");
+    } else if (fetchInt("vimSelectionY") != fetchInt("gameCursorY")) {
+        store("vimSelectionY", fetch("gameCursorY"));
+        store("keystrokes", "none&");
+    }
+
+    rectMode(CENTER);
+    fill(255);
+    stroke(0);
+
+    if (fetchBool("gameIsThereRedSquares")) {
+        store("gameIsThereRedSquares", "false");
+        for (int i=0; i<20; i++) {
+            for (int j=0; j<25; j++) {
+                if (fetchInt("gameCursorX") == j && fetchInt("gameCursorY") == i) {
+                    fill(200, 200, 255);
+                } else if (gameToDelete[i][0] <= j && gameToDelete[i][1] >= j) {
+                    fill(255, 200, 200);
+                    store("gameIsThereRedSquares", "true");
+                } else {
+                    fill(255);
+                }
+                rect(36*j+18, 36*i+18, 36, 36);
+                fill(0);
+                text(curVimDisplay[i][j], 36*j+12, 36*i+12);
+            }
+        }
+    } else {
+        fill(0);
+        if (fetchInt("gameScore") == 0) {
+            store("gameScore", fetch("stateCurTime"));
+        }
+        text("Your score is: " + fetch("gameScore") + ". The less score the better.", width/2, height/2);
+        text("Type ':q' to exit.", width/2, height/2+100);
+    }
+
+    
+    // println(fetch("keystrokes"));
+    // if (fetch("keystrokes").endsWith("h")) {
+    //     if (!(fetchInt("gameCursorX") == 0)) {
+    //         store("gameCursorX", fetchInt("gameCursorX") - 1);
+    //     }
+    //     store("keystrokes", fetch("keystrokes") + "none&");
+    // } else if (fetch("keystrokes").endsWith("j")) {
+    //     if (!(fetchInt("gameCursorY") == 19)) {
+    //         store("gameCursorY", fetchInt("gameCursorY") + 1);
+    //     }
+    //     store("keystrokes", fetch("keystrokes") + "none&");
+    // } else if (fetch("keystrokes").endsWith("k")) {
+    //     if (!(fetchInt("gameCursorY") == 0)) {
+    //         store("gameCursorY", fetchInt("gameCursorY") - 1);
+    //     }
+    //     store("keystrokes", fetch("keystrokes") + "none&");
+    // } else if (fetch("keystrokes").endsWith("l")) {
+    //     if (!(fetchInt("gameCursorX") == 24)) {
+    //         store("gameCursorX", fetchInt("gameCursorX") + 1);
+    //     }
+    //     store("keystrokes", fetch("keystrokes") + "none&");
+    // }
 }
 
 void mouseReleased() {
@@ -522,7 +729,9 @@ void keyPressed() {
     store("keystrokes", fetch("keystrokes") + key);
     if (key == ESC) {
         store("curVimCommand", "");
-    } else {
+    } else if (keyCode == SHIFT) {
+        return;
+    } else if (!(key == CODED)) {
         store("curVimCommand", fetch("curVimCommand") + key);
     }
 
@@ -569,8 +778,8 @@ void setup() {
     store("lastState", "none");
     store("skipAnimation", "false");
     store("setState", "none");
-    store("keystrokes", "none");
-    store("curVimCommand", "");
+    store("keystrokes", "none&");
+    store("curVimCommand", "&");
 
     store("helpMessage", join(loadStrings("help.txt"), "\n"));
     store("mazeStation1Message", join(loadStrings("station1.txt"), "\n"));
@@ -592,4 +801,20 @@ void setup() {
     store("mazeStation3Completed", "false");
     store("mazeStation4Completed", "false");
     store("mazeStation5Completed", "false");
+
+    for (int i=0; i<20; i++) {
+        store("setupCurVimDisplayLine", loadStrings("vim_display.txt")[i]);
+        for (int j=0; j<fetch("setupCurVimDisplayLine").length(); j++) {
+            curVimDisplay[i][j] = fetch("setupCurVimDisplayLine").charAt(j);
+       }
+    }
+
+    // curVimDisplay = vimDisplay;
+
+    store("gameCursorX", "0");
+    store("gameCursorY", "0");
+    store("gameVimMode", "normal");
+
+    store("gameIsThereRedSquares", "true");
+    store("gameScore", 0);
 }

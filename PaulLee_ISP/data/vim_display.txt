@@ -1,0 +1,20 @@
+This is a
+(bad) VIM emulator.
+Feel free to try out
+the concepts you learned.
+Your objective in this
+game is to delete all
+text highlighted in red.
+Good luck!
+To exit the game, type
+':q'. >:) -Paul
+The following is just
+random text for you to
+test your VIM skills on.
+Note that this VIM
+environment is very
+lacking, does NOT
+implement all the
+concepts taught in the
+maze. To try out VIM, get
+an actual VIM. :)
