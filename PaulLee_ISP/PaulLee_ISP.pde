@@ -1,8 +1,8 @@
 StringDict state = new StringDict();
 PImage mazeImg;
 PFont font;
-char[][] curVimDisplay = new char[20][25];
-int[][] gameToDelete = new int[20][2];
+char[][] curVimDisplay = new char[25][25];
+int[][] gameToDelete = new int[25][2];
 
 void store(String dict_key, int value) {
     state.set(dict_key, str(value));
@@ -250,13 +250,13 @@ void mainMenu() {
             // println(vimDisplay[0]);
             // println(curVimDisplay[0]);
             store("gameScore", 0);
-            for (int i=0; i<20; i++) {
+            for (int i=0; i<25; i++) {
                 store("setupCurVimDisplayLine", loadStrings("vim_display.txt")[i]);
                 for (int j=0; j<fetch("setupCurVimDisplayLine").length(); j++) {
                     curVimDisplay[i][j] = fetch("setupCurVimDisplayLine").charAt(j);
                 }
             }
-            for (int i=0; i<20; i++) {
+            for (int i=0; i<25; i++) {
                 String[] words = split(new String(curVimDisplay[i]), " ");
                 store("randObj", max(int(random(words.length) - 1), 0));
                 gameToDelete[i][0] = join(subset(words, 0, fetchInt("randObj")), " ").length() + 1;
@@ -601,7 +601,7 @@ void game() {
         store("vimSelectionStartIndex", 0);
     } else if (fetch("keystrokes").endsWith("G")) {
         store("vimSelectionEndIndex", 0);
-        store("gameCursorY", 19);
+        store("gameCursorY", 24);
     } else if (fetch("keystrokes").endsWith("gg")) {
         store("vimSelectionStartIndex", 0);
         store("gameCursorY", 0);
@@ -609,7 +609,7 @@ void game() {
         store("vimSelectionStartIndex", fetchInt("gameCursorX") - 1);
     } else if (fetch("keystrokes").endsWith("l") && fetchInt("gameCursorX") != 24) {
         store("vimSelectionEndIndex", fetchInt("gameCursorX") + 1);
-    } else if (fetch("keystrokes").endsWith("j") && fetchInt("gameCursorY") != 19) {
+    } else if (fetch("keystrokes").endsWith("j") && fetchInt("gameCursorY") != 24) {
         store("gameCursorY", fetchInt("gameCursorY") + 1);
     } else if (fetch("keystrokes").endsWith("k") && fetchInt("gameCursorY") != 0) {
         store("gameCursorY", fetchInt("gameCursorY") - 1);
@@ -669,7 +669,7 @@ void game() {
 
     if (fetchBool("gameIsThereRedSquares")) {
         store("gameIsThereRedSquares", "false");
-        for (int i=0; i<20; i++) {
+        for (int i=0; i<25; i++) {
             for (int j=0; j<25; j++) {
                 if (fetchInt("gameCursorX") == j && fetchInt("gameCursorY") == i) {
                     fill(200, 200, 255);
@@ -802,7 +802,7 @@ void setup() {
     store("mazeStation4Completed", "false");
     store("mazeStation5Completed", "false");
 
-    for (int i=0; i<20; i++) {
+    for (int i=0; i<25; i++) {
         store("setupCurVimDisplayLine", loadStrings("vim_display.txt")[i]);
         for (int j=0; j<fetch("setupCurVimDisplayLine").length(); j++) {
             curVimDisplay[i][j] = fetch("setupCurVimDisplayLine").charAt(j);

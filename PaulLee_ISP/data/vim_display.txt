@@ -13,8 +13,13 @@ random text for you to
 test your VIM skills on.
 Note that this VIM
 environment is very
-lacking, does NOT
+lacking, and does NOT
 implement all the
 concepts taught in the
 maze. To try out VIM, get
 an actual VIM. :)
+This game is actually
+open-sourced! Check it on
+Github. OWO UWU Please
+submit PRs so I can
+improve the game. :D
