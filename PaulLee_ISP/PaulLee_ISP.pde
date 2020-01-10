@@ -258,12 +258,12 @@ void mainMenu() {
             }
             for (int i=0; i<20; i++) {
                 String[] words = split(new String(curVimDisplay[i]), " ");
-                println(words[1]);
                 store("randObj", max(int(random(words.length) - 1), 0));
                 gameToDelete[i][0] = join(subset(words, 0, fetchInt("randObj")), " ").length() + 1;
                 gameToDelete[i][1] = gameToDelete[i][0] + words[fetchInt("randObj")].length() - 1;
             }
             store("setState", "game");
+            store("gameIsThereRedSquares", "true");
         } else if (fetch("mainMenuHoveringButton").equals("exit")) {
             store("setState", "exit");
         }

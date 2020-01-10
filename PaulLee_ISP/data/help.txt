@@ -4,16 +4,13 @@ This program teaches Vim in a form of a maze, and tests the user's knowledge in 
 
 Maze of Learning
 ================
-There are five stations to visit in the maze. Each station teaches a Vim skill. Only after you visit all station, the user may leave the maze.
+There are five stations to visit in the maze. Each station teaches a Vim skill. Only after you visit all stations, the user may leave the maze.
 
 Game of Testing
 ===============
 The game creates a limited Vim environment for the user to try out their new Vim Skills.
-Your objective is to delete all unwanted text displayed in red.
-If a line is "clean" (does not have any errors), the line will be removed.
-Periodically a new line with errors will be added to the screen.
-If the screen fills up with text, you lose.
-Your performance is measured by how long you last.
+Your objective is to delete all unwanted characters displayed in red.
+Your performance is measured by how long it takes you to remove all characters in red.
 
 Good Luck!
 
