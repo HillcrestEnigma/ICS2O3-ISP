@@ -1,3 +1,38 @@
+// Paul Lee 9Q WLMCI
+// ICS2O3
+// Ms.Krasteva
+// ICS ISP - Ley learns VIM!
+
+// Citations
+// Passing parameters into functions: https://processing.org/examples/functions.html
+// StringDict: https://processing.org/reference/StringDict.html
+// Array: https://processing.org/reference/Array.html
+// Declearing 2D arrays in Processing: MCPT Game Dev Team (Derek Zhang, Ben Zeng, Dereck Tu, Marina Semenova)
+// Integer.parseInt(): https://www.tutorialspoint.com/java/number_parseint.htm
+// Float.parseFloat(): https://www.geeksforgeeks.org/float-parsefloat-method-in-java-with-examples/
+// boolean(): https://processing.org/reference/booleanconvert_.html
+// concat(): https://processing.org/reference/concat_.html
+// subset(): https://processing.org/reference/subset_.html
+// new ...: https://processing.org/reference/new.html
+// millis(): https://processing.org/reference/millis_.html
+// max(): https://processing.org/reference/max_.html
+// random(): https://processing.org/reference/random_.html
+// int(): https://processing.org/reference/intconvert_.html
+// join(): https://processing.org/reference/join_.html
+// split(): https://processing.org/reference/split_.html
+// Typography: https://processing.org/tutorials/typography/
+// get(): https://processing.org/reference/get_.html
+// Str.endsWith(): https://www.tutorialspoint.com/java/java_string_endswith.htm
+// Character.isLetterOrDigit(): https://www.tutorialspoint.com/java/lang/character_isletterordigit.htm
+// Str.length(): https://www.tutorialspoint.com/java/java_string_length.htm
+// min(): https://processing.org/reference/min_.html
+// keyPressed(): https://processing.org/reference/keyPressed_.html (Thanks for Adam and Neik for recommending keyPressed)
+// key: https://processing.org/reference/key.html
+// keyCode: https://processing.org/reference/keyCode.html
+// Prevent Processing from exiting when the escape key is pressed: https://processing.org/discourse/beta/num_1276201899.html
+// loadStrings(): https://processing.org/reference/loadStrings_.html
+// loadImage(): https://processing.org/reference/loadImage_.html
+
 StringDict state = new StringDict();
 PImage mazeImg;
 PFont font;
