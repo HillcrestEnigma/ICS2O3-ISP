@@ -40,49 +40,49 @@ char[][] curVimDisplay = new char[25][25];
 int[][] gameToDelete = new int[25][2];
 
 void store(String dict_key, int value) {
+    // Store integer value in 'state' dictionary
     state.set(dict_key, str(value));
 }
 
 void store(String dict_key, float value) {
+    // Store float value in 'state' dictionary
     state.set(dict_key, str(value));
 }
 
 void store(String dict_key, String value) {
+    // Store string value in 'state' dictionary
     state.set(dict_key, value);
 }
 
 String fetch(String dict_key) {
+   // Get dict_key value from dictionary as a string
    return state.get(dict_key);
 }
 
 int fetchInt(String dict_key) {
+    // Get dict_key value from dictionary as an integer
     return Integer.parseInt(fetch(dict_key));
 }
 
 float fetchFloat(String dict_key) {
+    // Get dict_key value from dictionary as a float
     return Float.parseFloat(fetch(dict_key));
 }
 
 boolean fetchBool(String dict_key) {
+    // Get dict_key value from dictionary as a boolean
     return boolean(fetch(dict_key));
 }
 
 char[] deleteSubset(char[] array, int startIndex, int endIndex) {
+    // delete a subset of an array of char
     return concat(concat(subset(array, 0, startIndex), subset(array, endIndex + 1)), new char[endIndex - startIndex + 1]);
 }
 
-// void deepCopy(char[][] source_array, char[][] dest_array) {
-//     for (int i=0; i<source_array.length; i++) {
-//         arrayCopy(source_array[i], dest_array[i]);
-//     }
-// }
-
-// char[][] deleteSubset(char[][] array, int startIndex, int endIndex) {
-//     return concat(subset(array, 0, startIndex), subset(array, endIndex + 1));
-// }
-
 void callFunc() {
+    // Store current time
     store("curTime", millis());
+    // Call the appropriate function that renders the state that the user is currently in
     if (fetch("setState").equals("none")) {
         if (fetchInt("curTime") <= 5000) {
             store("newState", "loading");
@@ -153,9 +153,11 @@ void callFunc() {
 }
 
 void animation() {
+    // render animation when called
     rectMode(CORNERS); 
     store("state", "animation");
     store("aniTime", fetchInt("curTime") - 5000);
+    // based on the time determine what scene needs to be displayed
     if (fetchInt("aniTime") < 10000) {
         store("aniScene", "typing");
     } else if (fetchInt("aniTime") < 15000) {
@@ -168,6 +170,7 @@ void animation() {
         store("aniScene", "fadeout");
     }
 
+    // render the scene
     if (fetch("aniScene").equals("typing") || fetch("aniScene").equals("submitting") || fetch("aniScene").equals("learning") || fetch("aniScene").equals("fadeout")) {
         fill(100);
         rect(50, 50, width-50, 400);
@@ -220,6 +223,7 @@ void animation() {
 }
 
 void loading() {
+    // render the loading screen
     store("state", "loading");
     store("loadTime", fetchInt("curTime"));
     store("loadPercent", fetchInt("loadTime")/50);
@@ -236,12 +240,14 @@ void loading() {
 }
 
 void mainMenu() {
+    // render the main menu
     fill(0);
     stroke(0);
     textAlign(CENTER, CENTER);
     textSize(50);
     text("Ley learns Vim!", width/2, 100);
 
+    // render the buttons
     rectMode(CENTER);
     fill(155);
     textSize(20);
@@ -256,6 +262,7 @@ void mainMenu() {
     text("Start Game", width/2, 650);
     text("Exit Game", width/2, 775);
 
+    // check if the mouse if hovering over a button
     fill(155, 155, 100, 75);
     noStroke();
     store("mainMenuHoveringButton", "none");
@@ -275,15 +282,13 @@ void mainMenu() {
         }
     }
 
+    // set the appropriate state if the mouse is clicked
     if (mousePressed) {
         if (fetch("mainMenuHoveringButton").equals("instruction")) {
             store("setState", "help");
         } else if (fetch("mainMenuHoveringButton").equals("startMaze")) {
             store("setState", "maze");
         } else if (fetch("mainMenuHoveringButton").equals("startGame")) {
-            // deepCopy(vimDisplay, curVimDisplay);
-            // println(vimDisplay[0]);
-            // println(curVimDisplay[0]);
             store("gameScore", 0);
             for (int i=0; i<25; i++) {
                 store("setupCurVimDisplayLine", loadStrings("vim_display.txt")[i]);
@@ -306,8 +311,10 @@ void mainMenu() {
 }
 
 void station1() {
+    // render station 1
     store("state", "station1");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 1
         store("setState", "maze");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("mazeStation1Completed", "true");
@@ -323,8 +330,10 @@ void station1() {
 }
 
 void station2() {
+    // render station 2
     store("state", "station2");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 2
         store("setState", "maze");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("mazeStation2Completed", "true");
@@ -339,9 +348,10 @@ void station2() {
 }
 
 void station3() {
-
+    // render station 3
     store("state", "station3");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 3
         store("setState", "maze");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("mazeStation3Completed", "true");
@@ -356,8 +366,10 @@ void station3() {
 }
 
 void station4() {
+    // render station 4
     store("state", "station4");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 4
         store("setState", "maze");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("mazeStation4Completed", "true");
@@ -372,8 +384,10 @@ void station4() {
 }
 
 void station5() {
+    // render station 5
     store("state", "station5");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 5
         store("setState", "maze");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("mazeStation5Completed", "true");
@@ -388,8 +402,10 @@ void station5() {
 }
 
 void station6() {
+    // render station 6
     store("state", "station6");
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit station 6
         if (fetchBool("mazeStation6Completed")) {
             store("setState", "mainMenu");
         } else {
@@ -403,6 +419,7 @@ void station6() {
     textLeading(30);
     fill(0);
     rectMode(CORNERS);
+    // check if the user has visited the other stations
     if (fetchBool("mazeStation1Completed") && fetchBool("mazeStation2Completed") && fetchBool("mazeStation3Completed") && fetchBool("mazeStation4Completed") && fetchBool("mazeStation5Completed")) {
         store("mazeStation6Completed", "true");
     }
@@ -415,6 +432,7 @@ void station6() {
 }
 
 void help() {
+    // render the help message
     store("state", "instructions");
     textSize(20);
     textAlign(BASELINE, BASELINE);
@@ -424,14 +442,17 @@ void help() {
     text(fetch("helpMessage"), 50, 50, width-50, height-50);
 
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit the help message
         store("setState", "mainMenu");
         store("keystrokes", fetch("keystrokes") + "none");
     }
 }
 
 void goodbye() {
+    // render the 'goodbye' message
     store("state", "exit");
     if (fetchInt("stateCurTime") < 5000) {
+        // display the message
         textSize(30);
         textAlign(CENTER, CENTER);
         fill(0);
@@ -439,21 +460,25 @@ void goodbye() {
         textSize(20);
         text("The game will exit in 5 seconds...", width/2, 600);
     } else {
+        // exit the program
         exit();
     }
 }
 
 void maze() {
+    // render the maze
     store("state", "maze");
     store("mazeMoveSpeed", 20);
 
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit the maze
         store("setState", "mainMenu");
         store("keystrokes", fetch("keystrokes") + "none");
     }
 
     background(200, 200, 100);
 
+    // display the maze
     image(mazeImg, fetchFloat("mazeX"), fetchFloat("mazeY"));
 
     store("mazeMaxMoveDistLeft", 20);
@@ -469,6 +494,7 @@ void maze() {
     store("mazeStation5Color", color(#6700FF));
     store("mazeStation6Color", color(#FF00FF));
     
+    // station collision detection
     if (fetchInt("mazePosColor") == fetchInt("mazeStation1Color") && !fetchBool("mazeStation1Completed")) {
         println("station1");
         store("setState", "station1");
@@ -484,6 +510,7 @@ void maze() {
         store("setState", "station6");
     }
 
+    // determine the maximum distance the player can move before hitting the walls
     for (int i=0; i<=fetchFloat("mazeMoveSpeed"); i++) {
         if (get(width/2-i-3, height/2) == color(0, 0, 0)) {
             store("mazeMaxMoveDistLeft", i);
@@ -513,6 +540,7 @@ void maze() {
     }
 
 
+    // process the keystrokes to correctly respond to user input
     if (fetch("keystrokes").endsWith("h")) {
         store("mazeX", fetchFloat("mazeX") + fetchFloat("mazeMaxMoveDistLeft"));
         store("mazeCharDirection", "l");
@@ -536,6 +564,7 @@ void maze() {
 
     rectMode(CENTER);
 
+    // render the character
     if (fetch("mazeCharDirection").equals("d")) {
         rect(width/2, height/2, 10, 30);
         
@@ -575,9 +604,11 @@ void maze() {
 }
 
 void game() {
+    // render the game
     store("state", "game");
 
     if (fetch("keystrokes").substring(fetchInt("keystrokesLen")-2).equals(":q")) {
+        // exit the game
         store("setState", "mainMenu");
         store("keystrokes", fetch("keystrokes") + "none&");
         store("gameScore", 0);
@@ -587,6 +618,7 @@ void game() {
     store("vimSelectionEndIndex", fetch("gameCursorX"));
     store("vimSelectionY", fetch("gameCursorY"));
 
+    // process the keystrokes to change the game's state
     if (fetch("keystrokes").endsWith("e")) {
         for (int i=fetchInt("vimSelectionEndIndex"); i<24; i++) {
             if (Character.isLetterOrDigit(curVimDisplay[fetchInt("vimSelectionY")][i+1])) {
@@ -650,6 +682,7 @@ void game() {
         store("gameCursorY", fetchInt("gameCursorY") - 1);
     }
 
+    // process the 'x' command
     if (fetch("keystrokes").endsWith("x")) {
         if (gameToDelete[fetchInt("gameCursorY")][0] <= fetchInt("gameCursorX") && gameToDelete[fetchInt("gameCursorY")][1] >= fetchInt("gameCursorX")) {
             gameToDelete[fetchInt("gameCursorY")][1] -= 1;
@@ -661,6 +694,7 @@ void game() {
         store("keystrokes", "none&");
     }
 
+    // unused
     if (fetch("keystrokes").endsWith("d$")) {
         
         print("delet everything");
@@ -668,6 +702,7 @@ void game() {
     }
         
 
+    // process the deletion of characters
     if (fetch("keystrokes").charAt(fetch("keystrokes").length() - 2) == 'd' && !fetch("keystrokes").endsWith("G")) {
         if (fetch("keystrokes").endsWith("w")) {
             store("vimSelectionEndIndex", fetchInt("vimSelectionEndIndex") - 1);
@@ -687,6 +722,7 @@ void game() {
         store("keystrokes", "none&");
     }
 
+    // move the cursor
     if (fetchInt("vimSelectionStartIndex") != fetchInt("gameCursorX")) {
         store("gameCursorX", fetchInt("vimSelectionStartIndex"));
         store("keystrokes", "none&");
@@ -703,6 +739,7 @@ void game() {
     stroke(0);
 
     if (fetchBool("gameIsThereRedSquares")) {
+        // render the game's display
         store("gameIsThereRedSquares", "false");
         for (int i=0; i<25; i++) {
             for (int j=0; j<25; j++) {
@@ -720,6 +757,7 @@ void game() {
             }
         }
     } else {
+        // display the game
         fill(0);
         if (fetchInt("gameScore") == 0) {
             store("gameScore", fetch("stateCurTime"));
@@ -727,33 +765,10 @@ void game() {
         text("Your score is: " + fetch("gameScore") + ". The less score the better.", width/2, height/2);
         text("Type ':q' to exit.", width/2, height/2+100);
     }
-
-    
-    // println(fetch("keystrokes"));
-    // if (fetch("keystrokes").endsWith("h")) {
-    //     if (!(fetchInt("gameCursorX") == 0)) {
-    //         store("gameCursorX", fetchInt("gameCursorX") - 1);
-    //     }
-    //     store("keystrokes", fetch("keystrokes") + "none&");
-    // } else if (fetch("keystrokes").endsWith("j")) {
-    //     if (!(fetchInt("gameCursorY") == 19)) {
-    //         store("gameCursorY", fetchInt("gameCursorY") + 1);
-    //     }
-    //     store("keystrokes", fetch("keystrokes") + "none&");
-    // } else if (fetch("keystrokes").endsWith("k")) {
-    //     if (!(fetchInt("gameCursorY") == 0)) {
-    //         store("gameCursorY", fetchInt("gameCursorY") - 1);
-    //     }
-    //     store("keystrokes", fetch("keystrokes") + "none&");
-    // } else if (fetch("keystrokes").endsWith("l")) {
-    //     if (!(fetchInt("gameCursorX") == 24)) {
-    //         store("gameCursorX", fetchInt("gameCursorX") + 1);
-    //     }
-    //     store("keystrokes", fetch("keystrokes") + "none&");
-    // }
 }
 
 void mouseReleased() {
+    // skip animation if mouse if pressed
     if (fetch("state").equals("animation")) {
         store("skipAnimation", "true");
         store("setState", "mainMenu");
@@ -761,6 +776,7 @@ void mouseReleased() {
 }
 
 void keyPressed() {
+    // store keystrokes in the state dictionary
     store("keystrokes", fetch("keystrokes") + key);
     if (key == ESC) {
         store("curVimCommand", "");
@@ -774,6 +790,8 @@ void keyPressed() {
 }
 
 void draw() {
+    // clear the graphics window and call the callFunc function
+
     background(255);
     stroke(0);
 
@@ -785,24 +803,10 @@ void draw() {
     text("("+mouseX+", "+mouseY+")", mouseX, mouseY);
 
     store("keystrokesLen", fetch("keystrokes").length());
-
-    // rectMode(CORNERS);
-    // fill(255);
-    // rect(0, height-25, width, height);
-    // fill(50);
-    // noStroke();
-    // textSize(10);
-    // text(fetch("curVimCommand"), width*6/10, height);
-    
-    // store("curVimCommandLen", fetch("curVimCommand").length());
-    // if (fetchInt("curVimCommandLen") > 1) {
-    //     store("curVimCommand", "");
-    // } else if (fetch("curVimCommand").endsWith("\n")) {
-    //     store("curVimCommand", "");
-    // }
 }
 
 void setup() {
+    // set the program up
     size(900, 900);
     frameRate(30);
     font = createFont("font.ttf", 20);
@@ -843,8 +847,6 @@ void setup() {
             curVimDisplay[i][j] = fetch("setupCurVimDisplayLine").charAt(j);
        }
     }
-
-    // curVimDisplay = vimDisplay;
 
     store("gameCursorX", "0");
     store("gameCursorY", "0");
